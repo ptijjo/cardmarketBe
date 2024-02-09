@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ArticleInterface } from "./article.interface";
+import validator from "validator";
 
 const UserSchema = new mongoose.Schema<ArticleInterface>({
 
@@ -33,6 +34,12 @@ const UserSchema = new mongoose.Schema<ArticleInterface>({
         trim: true,
         enum:["published", "not published"]
     },
+    slug: {
+        type: String,
+        validate(v: any) {
+            if (!validator.isSlug(v)) throw new Error("Ceci n'est pas un slug");
+        }
+    }
 
 });
 

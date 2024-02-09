@@ -1,0 +1,37 @@
+.recherche{
+    margin: 0 0 5px 0;
+    width: 100vw;
+    aspect-ratio: 8/1;
+    @include centrer-div;
+    padding: 0 10px;
+    position: fixed;
+    left: 0;
+    top: 10%;
+    background-color: #c9e5c9;
+    z-index: 100;
+
+
+    .barre-recherche{
+        width: 80%;
+        text-align: center;
+        aspect-ratio: 8/1;
+        border-radius: 12px;
+        background-color: rgb(192, 192, 192);
+        border: none;
+    }
+
+    .icone-recherche-content{
+        width: 10%;
+        aspect-ratio: 1/1;
+        background-color: blue;
+        border-radius: 50%;
+        @include centrer-div;
+        border: none;
+        .icone-recherche{
+            font-size:x-large;
+            color: white;
+        }
+    }
+    
+    
+}

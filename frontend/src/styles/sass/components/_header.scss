@@ -1,0 +1,64 @@
+.header{
+    width: 100vw;
+    background-color: #c9e5c9;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    @include centrer-div;
+
+    .logo-content{
+        width: 20%;
+        aspect-ratio: 1/1;
+        @include centrer-div;
+       
+
+        .logo{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
+    .identifiant-content{
+        @include centrer-div;
+
+        .identification{
+            border: 1px solid blue;
+            border-radius: 12px;
+            padding: 0 5px;
+            background-color: blue;
+            color: white;
+            font-size: small;
+        }
+    }
+
+    .panier-content{
+        width: 10%;
+        aspect-ratio: 1/1;
+        @include centrer-div;
+        flex-direction: column;
+        
+        .panier{
+            position: relative;
+            top: 25%;
+            left: 0%;
+        }
+        .quantite-panier{
+            border-radius: 50%;
+            background-color: red;
+            width: 50%;
+            height: 50%;
+            text-align: center;
+            @include centrer-div;
+            color: white;
+            position: relative;
+            left: 38%;
+            bottom: -10%;
+            font-size:x-small;
+        }
+    }
+}

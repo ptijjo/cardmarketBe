@@ -5,5 +5,5 @@ export interface ArticleInterface{
     prix: number;
     category: string;
     status: string;
-    role: string;
+    slug: string;
 }

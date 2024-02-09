@@ -1,5 +1,9 @@
+
+import Header from "@/components/Header";
 import type { Metadata } from "next";
-import "./globals.css";
+import "../styles/css/index.css";
+import BarreRecherche from "@/components/BarreRecherche";
+
 
 
 export const metadata: Metadata = {
@@ -14,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <BarreRecherche />
+        {children}
+      </body>
     </html>
   );
 }
