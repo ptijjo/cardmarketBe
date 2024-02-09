@@ -1,0 +1,16 @@
+@import "./settings";
+
+//layout
+@import "./layout/header";
+
+
+//Components
+@import "./components/identifiant";
+@import "./components/articles";
+@import "./components/barreRecherche";
+@import"./components/reseau";
+@import "./components/panier";
+
+//Pages
+@import "./pages/home";
+@import "./pages/commande";

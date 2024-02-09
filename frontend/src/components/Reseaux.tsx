@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebook,FaInstagram,FaTiktok  } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Reseaux: React.FC = () => {
     return (

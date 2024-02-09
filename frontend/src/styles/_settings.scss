@@ -21,8 +21,7 @@
     }
   
   
-  body {
-    min-height: 100dvh;
+  body,#root,.layout {
     width: 100vw;
     display: flex;
     flex-direction: column;

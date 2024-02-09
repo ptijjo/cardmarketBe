@@ -1,0 +1,12 @@
+.identifiant-content{
+    @include centrer-div;
+
+    .identification{
+        border: 1px solid blue;
+        border-radius: 12px;
+        padding: 0 5px;
+        background-color: blue;
+        color: white;
+        font-size: small;
+    }
+}
