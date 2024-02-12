@@ -20,5 +20,10 @@ export class UserRoute implements Route{
             .post(`${this.path}/connection`, this.userCtrl.connectionUser) // Connection d'un utilisateur
             .put(`${this.path}/:id`,auth,) //Modification des données utilisateur
             //.delete(`${this.path}/:id`,auth,this.userCtrl.deleteUser) //Supression utilisateur
+        
+            .post(`${this.path}/decodage`, this.userCtrl.decodageToken) // Décodage du token
+        
+            .post(`${this.path}/forget-password`,this.userCtrl.generationLienMdp) // Génération du lien de réinitailisation mdp
+            .post(`${this.path}/reset-password`,this.userCtrl.resetMdp) // Envoi du mail pour réinitialiser le mdp
     }
 }

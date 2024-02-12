@@ -15,6 +15,7 @@ export interface UserInterface{
     last_name:string;
     email:string;
     password:string;
-    adress: Address;
-    tel: number;
+    adress?: Address;
+    tel?: number;
+    reset_password_token?: string;
 }

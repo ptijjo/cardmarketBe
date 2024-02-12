@@ -5,6 +5,8 @@
     position: fixed;
     top: 0;
     left: 0;
+    padding: 0 15px;
+    margin: 0;
 
     @include centrer-div;
     flex-direction: column;
@@ -12,6 +14,7 @@
         @include centrer-div;
     .logo-home{
         width: 20%;
+        margin: 0;
             aspect-ratio: 1/1;
             @include centrer-div;
             .logo-content{
@@ -23,10 +26,42 @@
                 .logo{
                     width: 100%;
                     height: 100%;
-                    object-fit: cover;
+                    object-fit: contain;
                     object-position: center;
                 }
             }  
+        }
+
+        .connection-content{
+            @include centrer-div;
+            width: 80%;
+            margin: 0;
+            justify-content: flex-end;
+            
+
+        }
+
+        .userName{
+            @include centrer-div;
+    
+            .identifiant-deconnection{
+                @include centrer-div;
+                gap: 20px;
+                p{
+                    font-size: large;
+                }
+                button{
+                    background-color: blue;
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 05px;
+                }
+            }
+        }
+    
+        .nonVisible{
+            display: none;
         }
     }
 }

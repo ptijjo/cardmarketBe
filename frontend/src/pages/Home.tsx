@@ -3,9 +3,9 @@ import Articles from '../components/Articles'
 
 const Home: React.FC = () => {
     return (
-        <div className='home'>
+        <main className='main'>
             <Articles/>
-        </div>
+        </main>
     )
 }
 

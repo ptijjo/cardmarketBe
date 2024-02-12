@@ -4,6 +4,8 @@ import { UserInterface } from "../models/client/user.interface";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import "dotenv/config";
+import {v4 as uuid} from "uuid"
+import { sendMailForgetPassword } from "../email/user/user.mail";
 
 
 export class userController{
@@ -84,18 +86,18 @@ export class userController{
             const findUser:UserInterface|null = await User.findOne({ email: req.body.email });
 
             
-            if (findUser===null) return res.status(401).json({ message: 'Identifiants incorrects' });
+            if (findUser===null) return res.status(401).json({ message: 'Email incorrect' });
 
             const findMdp = await bcrypt.compare(req.body.password, findUser.password);
 
-            if (!findMdp) return res.status(401).json({ message: 'Identifiants incorrects' });
+            if (!findMdp) return res.status(401).json({ message: 'Mot de passe  incorrect' });
 
             res.status(200).json({
                 userId: findUser._id,
                 userEmail: findUser.email,
                 userFistName: findUser.first_name,
                 userLastName: findUser.last_name,
-                userPicture: findUser.role,
+                userRole: findUser.role,
                 token: jsonwebtoken.sign(
                     {
                         userId: findUser._id,
@@ -117,6 +119,72 @@ export class userController{
         }
     }
 
-    //Connection via facebook
+    //Decodage token
+    public decodageToken = async (req: Request, res: Response) => {
+        try {
+            const token : string = req.body.token;
+            const decodedToken : any = jsonwebtoken.verify(token, process.env.TOKEN_SECRET as string);
+            const userId = decodedToken.userId;
+            const userLastName = decodedToken.userLastName;
+            const  userFirstName= decodedToken.userFirstName;
+            const userEmail = decodedToken.userEmail;
+            const userRole = decodedToken.userRole;
+
+            res.status(200).json({ userLastName, userFirstName, userId, userRole, userEmail });
+            
+        } catch (error) {
+            res.status(400).json({
+                message: "status fail! 🤯",
+                response: error
+            })
+        }
+    }
+
+    //Génération du lien de réinitailisation mdp
+    public generationLienMdp = async (req: Request, res: Response) => {
+        try {
+            const valideEmail:UserInterface|null = await User.findOne({ email: req.body.email });
+            if (valideEmail === null) return res.status(401).json({ message: 'Email introuvable' });
+
+             //Creation d'un token aléatoire
+            const password_token = uuid();
+            
+            await User.updateOne({ email: valideEmail.email },
+                {
+                    $set: { reset_password_token: password_token }
+                })
+            
+            const newUser : UserInterface|null = await User.findOne({ email: valideEmail.email });
+            
+            //send Email
+            const link = `${process.env.FRONT_END}/reset-password/${password_token}`;
+
+            await sendMailForgetPassword(valideEmail.email, valideEmail.first_name, valideEmail.last_name, link);  
+            
+                
+            res.status(200).json({ newUser })
+            
+            return newUser?.email;
+        }   
+            
+        catch (error) {
+            res.status(400).json({
+                message: "status fail! 🤯",
+                response: error
+            })
+        }
+    }
+
+    //Rénitialisation du mot de passe
+    public resetMdp = async (req: Request, res: Response) => {
+        try {
+            
+        } catch (error) {
+            res.status(400).json({
+                message: "status fail! 🤯",
+                response: error
+            })
+        }
+    }
     
 }

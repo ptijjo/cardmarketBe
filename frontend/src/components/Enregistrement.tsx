@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Selector } from '../features/store';
+import { selectUser } from '../features/user/userSlice';
 
 const customStyles = {
     content: {
@@ -34,6 +36,8 @@ const Enregistrement: React.FC = () => {
         } catch (error) { /* empty */ }
     }
 
+    const user = Selector(selectUser);
+
 
     const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -44,7 +48,7 @@ const Enregistrement: React.FC = () => {
 
     return (
         <div className='identifiant-content'>
-            <div className='identification' onClick={HandleConnection}>S'enregistrer </div>
+            <div className={(user === null) ? 'identification' : "nonVisible"} onClick={HandleConnection}>S'enregistrer </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setIsOpen(false)}

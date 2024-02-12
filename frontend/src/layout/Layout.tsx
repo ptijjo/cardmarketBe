@@ -4,6 +4,8 @@ import Header from './Header';
 import Footer from './Footer';
 import Home from '../pages/Home';
 import Commande from '../pages/Commande';
+import Categorie from '../pages/Categorie';
+import Profil from '../pages/Profil';
 
 const Layout: React.FC = () => {
     return (
@@ -12,6 +14,8 @@ const Layout: React.FC = () => {
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/commande' element={<Commande />} />
+                <Route path='categorie/:id' element={<Categorie />} />
+                <Route path='profil' element={<Profil />} />
             </Routes>
             <Footer />
 

@@ -43,24 +43,21 @@ const userSchema = new mongoose.Schema<UserInterface>({
         trim: true,
         validate(v: any) {
             if (!validator.isStrongPassword(v)) throw new Error("Veuillez entrer un mot de passe avec au moins 8 caratères avec une majuscule, un chiffre et un symbol");
-            if (!validator.isEmpty(v)) throw new Error("Veuillez entrer un mot de passe avec au moins 8 caratères avec une majuscule, un chiffre et un symbol");
+
         },
     },
 
     adress: {
         numero: {
             type: Number,
-            required: true,
             trim: true,
         },
         rue: {
             type: String,
-            required: true,
             trim: true,
         },
         code_postal: {
             type: Number,
-            required: true,
             trim: true,
             validate(v: any) {
                 if (!validator.isPostalCode(v,"FR")) throw new Error("Veuillez entrer un code postal valide");
@@ -68,17 +65,24 @@ const userSchema = new mongoose.Schema<UserInterface>({
         },
         ville: {
             type: String,
-            required: true,
             trim: true,
         }
     },
     tel: {
         type: Number,
-        required: true,
         trim: true,
         validate(v: any) {
             if (!validator.isMobilePhone(v,"fr-FR")) throw new Error("Veuillez entrer un numéro de téléphone valide");
         }
+    },
+
+    reset_password_token: {
+        type: String,
+        unique: true,
+        validate(v: any) {
+            if (!validator.isJWT(v)) throw new Error("Token non-valide");
+
+        },
     }
 
 });

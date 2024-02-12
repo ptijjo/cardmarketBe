@@ -1,7 +1,8 @@
 .lien-commande{
     width: 10%;
-    aspect-ratio: 1/1;
+    //aspect-ratio: 1/1;
     @include centrer-div;
+    margin: 0;
     
     .panier-content{
         width: 100%;
