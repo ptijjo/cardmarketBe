@@ -1,8 +1,9 @@
+"use client"
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Selector } from '../features/store';
-import { selectUser } from '../features/user/userSlice';
+import { Selector } from '../lib/store';
+import { selectUser } from '../lib/feature/user/userSlice';
 
 const customStyles = {
     content: {

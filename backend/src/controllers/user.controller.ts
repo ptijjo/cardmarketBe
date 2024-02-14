@@ -6,6 +6,7 @@ import jsonwebtoken from "jsonwebtoken";
 import "dotenv/config";
 import {v4 as uuid} from "uuid"
 import { sendMailForgetPassword } from "../email/user/user.mail";
+import validator from "validator";
 
 
 export class userController{
@@ -178,6 +179,33 @@ export class userController{
     //Rénitialisation du mot de passe
     public resetMdp = async (req: Request, res: Response) => {
         try {
+            
+            const user: UserInterface | null = await User.findOne({ reset_password_token: req.body.reset_password_token });
+            
+            if (user === null) {
+                return res.status(400).json({ message: "Erreur ! Veuillez réessayer !" })
+            };
+
+            if (!validator.isStrongPassword(req.body.password)) return res.status(401).json("Veuillez entrer un mot de passe avec au moins 8 caratères avec une majuscule, un chiffre et un symbol");
+
+            const differentMdp = await bcrypt.compare(req.body.password, user.password);
+
+            if (differentMdp) return res.status(401).json({ message: `Veuillez choisir un mot de passe différent de l'ancien` });
+
+            const hashMdp = await bcrypt.hash(req.body.password, 10);
+
+            await User.updateOne({ reset_password_token: user.reset_password_token }, {
+                $set: {
+                    password: hashMdp
+                }
+            });
+
+            const newMdp: UserInterface | null = await User.findOne({ reset_password_token: user.reset_password_token });
+
+            if (newMdp === null) return res.status(500).json("Erreur serveur")
+            
+            res.status(200).json({newMdp, user})
+            
             
         } catch (error) {
             res.status(400).json({

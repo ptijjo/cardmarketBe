@@ -1,9 +1,10 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { Dispatch, Selector } from '../features/store';
-import { login, selectUser, selectUserStatus } from '../features/user/userSlice';
+import { Dispatch, Selector } from '../lib/store';
+import { login, selectUser, selectUserStatus } from '../lib/feature/user/userSlice';
 import Loader from './Loader';
 
 
@@ -32,7 +33,7 @@ const Identification: React.FC = () => {
     const status = Selector(selectUserStatus);
     //const error = Selector(state => state.user.error);
 
-    const token: string | null = (localStorage.getItem("token"));
+    const token: string | null = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
     const [modalIsOpen, setIsOpen] = useState(false);
 
     const {
@@ -60,12 +61,14 @@ const Identification: React.FC = () => {
     };
 
     useEffect(() => {
+       
         if (status === 'idle' && token !== null) {
             dispatch(login(token));
         }
-    }, [status, dispatch, token]);
+        if (token===null) return
+    }, [status, dispatch,token]);
 
-    console.log(status);
+    console.log(status,token);
 
 
     if (status === 'loading') {

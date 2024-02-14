@@ -1,6 +1,5 @@
-import React from 'react'
 
-const Commande: React.FC = () => {
+const Commande = () => {
     return (
         <div className='commande'>
             Commande

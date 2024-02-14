@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+"use client"
+import { useState } from 'react';
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
-const BarreRecherche: React.FC = () => {
+const BarreRecherche = () => {
 
   const [recherche, setRecherche] = useState("");
 

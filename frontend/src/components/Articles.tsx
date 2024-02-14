@@ -1,14 +1,15 @@
+"use client"
 import React from 'react';
 import { products } from '../data/Data';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation'
 
 
 const Articles: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   const HandleCategorie = (data: string) => {
 
-    navigate(`/categorie/${data}`)
+    navigate.push(`/categorie/${data}`)
 
 
   }

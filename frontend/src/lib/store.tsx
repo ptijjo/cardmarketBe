@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./user/userSlice";
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import userReducer from "./feature/user/userSlice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({
     reducer: {
@@ -13,7 +13,6 @@ export type AppDispatch = typeof store.dispatch;
 
 export const Dispatch = () => useDispatch<AppDispatch>();
 export const Selector: TypedUseSelectorHook<RootState> = useSelector;
-
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default store;

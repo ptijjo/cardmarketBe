@@ -73,7 +73,7 @@ export class MailService{
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
           <meta name="format-detection" content="telephone=no" />
-          <title>Template Kipdev.io</title>
+          <title>Vibz company</title>
           <style type="text/css">
             /* -------------------------------------
                RESET STYLE
@@ -549,7 +549,7 @@ export class MailService{
                                                                                      <![endif]-->
     
                                                 <!--[if !mso]>-->
-                                                <a href="${link}" class="btn-2">${buttonText}</a>
+                                                <a href="${link}" class='btn-2'>${buttonText}</a>
                                                 <!--<![endif]-->
     
     
