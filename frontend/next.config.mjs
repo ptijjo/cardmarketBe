@@ -1,4 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: 'vibz.s3.eu-central-1.amazonaws.com',
+        pathname: "**"
+      }
 
-export default nextConfig;
+    ]
+    //domains: ['vibz.s3.eu-central-1.amazonaws.com'],
+     },
+  };
+
+
+  export default nextConfig;

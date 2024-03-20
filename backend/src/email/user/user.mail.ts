@@ -1,12 +1,11 @@
-
+/* eslint-disable prettier/prettier */
 import { MailService } from '../../services/mail.service';
 
 const mailService = new MailService();
 
 export const sendMailForgetPassword = async (email: string, firstname: string, lastname: string, link: string) => {
-
-    try {
-        const subject = `${firstname},  réinitialisez votre mot de passe 🔒`;
+  try {
+    const subject = `${firstname},  réinitialisez votre mot de passe 🔒`;
 
     const prehead = `
         <p>Bonjour ${firstname} ${lastname},</p>
@@ -27,17 +26,10 @@ export const sendMailForgetPassword = async (email: string, firstname: string, l
 
     const buttonText = 'Réinitialiseer mon mot de passe';
 
-    
-    
-        const lien = await mailService.sendEmail(email, subject, content, lastname, firstname, link, disclaimer, prehead, buttonText);
+    const lien = await mailService.sendEmail(email, subject, content, lastname, firstname, link, disclaimer, prehead, buttonText);
 
-        console.log(lien);
-        
-    
-        
-    } catch (error) {
-        console.log(error)
-    }
-
-    
-}
+    console.log(lien);
+  } catch (error) {
+    console.log(error);
+  }
+};

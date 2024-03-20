@@ -1,64 +1,81 @@
-import express from "express";
-import http from "http";
-import cors from "cors";
-import morgan from "morgan";
-import mongoose from "mongoose";
-import "dotenv/config";
-import { Route } from "./routes";
+import 'reflect-metadata';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import hpp from 'hpp';
+import morgan from 'morgan';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { Routes } from '@interfaces/routes.interface';
+import { ErrorMiddleware } from '@middlewares/error.middleware';
+import { logger, stream } from '@utils/logger';
 
-export class App{
+export class App {
+  public app: express.Application;
+  public env: string;
+  public port: string | number;
 
-    private port: number | string;
-    private app: express.Application;
-    private  server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
+  constructor(routes: Routes[]) {
+    this.app = express();
+    this.env = NODE_ENV || 'development';
+    this.port = PORT || 3000;
 
-    //Création de notre constructeur
-    constructor(routes:Route[]){
-        this.app = express(); 
-        this.port = process.env.PORT || 8585;
-        this.server = http.createServer(this.app);
+    this.initializeMiddlewares();
+    this.initializeRoutes(routes);
+    this.initializeSwagger();
+    this.initializeErrorHandling();
+  }
 
-        this.listen();
-        this.initilizeServer();
-        this.mongodbCOnnection();
-        this.initializeRoutes(routes)
+  public listen() {
+    this.app.listen(this.port, () => {
+      logger.info(`=================================`);
+      logger.info(`======= ENV: ${this.env} =======`);
+      logger.info(`🚀 App listening on the port ${this.port}`);
+      logger.info(`=================================`);
+    });
+  }
 
-    }
+  public getServer() {
+    return this.app;
+  }
 
-    //Méthode pour écouter sur quel port notre serveur tourne
-    private listen():void{
-        this.server.listen(this.port, ()=>{
-            console.log(`🚀 Notre serveur tourne sur le port : ${this.port}`)   
-        })
-    }
+  private initializeMiddlewares() {
+    this.app.use(morgan(LOG_FORMAT, { stream }));
+    this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
+    this.app.use(hpp());
+    this.app.use(helmet());
+    this.app.use(compression());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cookieParser());
+  }
 
-    //Méthode qui initialise notre serveur
-    private initilizeServer():void{
-        this.app
-        .use(cors())
-        .use(morgan("dev"))
-        .use(express.json())
-    }
+  private initializeRoutes(routes: Routes[]) {
+    routes.forEach(route => {
+      this.app.use('/', route.router);
+    });
+  }
 
-    //Méthode pour la connection a mongodb
-    private mongodbCOnnection = async ()=>{
-        try {
-            
-            await mongoose.connect(`mongodb+srv://${process.env.ID}:${process.env.PASSwORD}@${process.env.SERVER_MONGODB}.mongodb.net/?retryWrites=true&w=majority`)
+  private initializeSwagger() {
+    const options = {
+      swaggerDefinition: {
+        info: {
+          title: 'REST API',
+          version: '1.0.0',
+          description: 'Example docs',
+        },
+      },
+      apis: ['swagger.yaml'],
+    };
 
-            console.log(`Connection à mongoDB réussie !!! 👍`);
-            
-        } catch (error) {
-            console.log(`Connection à mongoDb échouée !!! 🤯 : ${error}`);
-            
-        }
-    }
+    const specs = swaggerJSDoc(options);
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+  }
 
-    //Méthode pour les différentes routes
-    private initializeRoutes(routes:Route[]){
-        routes.forEach(route =>{
-            this.app.use("/",route.router)
-        })
-    }
-    
+  private initializeErrorHandling() {
+    this.app.use(ErrorMiddleware);
+  }
 }

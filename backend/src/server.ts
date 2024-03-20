@@ -1,6 +1,10 @@
-import { App } from "./app";
-import { ArticleRoute } from "./routes/article.route";
-import { UserRoute } from "./routes/user.route";
+import { App } from '@/app';
+import { UserRoute } from '@routes/users.route';
+import { ValidateEnv } from '@utils/validateEnv';
+import { AddressRoute } from './routes/address.route';
 
+ValidateEnv();
 
-new App([new UserRoute(), new ArticleRoute()]);
+const app = new App([new UserRoute(), new AddressRoute()]);
+
+app.listen();

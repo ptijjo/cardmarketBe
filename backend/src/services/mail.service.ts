@@ -1,61 +1,49 @@
+/* eslint-disable prettier/prettier */
+import { Email_Pro, MJ_APIKEY_PRIVATE, MJ_APIKEY_PUBLIC } from '@/config';
 import Mailjet from 'node-mailjet';
-require("dotenv").config();
 
+export class MailService {
+  //Fonction pour envoyer des emails
+  public sendEmail = async (
+    email: string,
+    subject: string,
+    content: string,
+    firstname: string,
+    lastname: string,
+    prehead: string,
+    link: string,
+    disclaimer: string,
+    buttonText: string,
+  ): Promise<any> => {
+    const mailjet = Mailjet.apiConnect(MJ_APIKEY_PUBLIC as string, MJ_APIKEY_PRIVATE as string);
 
-
-export class MailService{
-
-
-    //Fonction pour envoyer des emails
-    public sendEmail = async (
-        email: string,
-        subject: string,
-        content: string,
-        firstname: string,
-        lastname: string,
-        prehead: string,
-        link: string,
-        disclaimer: string,
-        buttonText: string,
-       
-    ): Promise<any> => {
-
-        const mailjet = Mailjet.apiConnect(
-          process.env.MJ_APIKEY_PUBLIC as string,
-          process.env.MJ_APIKEY_PRIVATE as string,
-        );
-        
-        const request = mailjet
-          .post("send", { version: 'v3.1' })
-          .request({
-            Messages: [
-              {
-                From: {
-                  Email: process.env.Email_Pro,
-                  Name:"Vibz Company"
-                },
-                To: [
-                  {
-                    Email: email,
-                    Name:`${firstname} ${lastname}`
-                  }
-                ],
-                Subject: subject,
-                TextPart:subject,
-                HTMLPart:await this.getTemplate(content, prehead, link, disclaimer, subject, buttonText)
-              }
-            ],    
-          })
-          request
-          .then(result => {
-            console.log(result.body)
-          })
-          .catch(err => {
-            console.log(err.statusCode)
-          })
-        
-        
-    };
+    const request = mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: Email_Pro,
+            Name: 'Vibz Company',
+          },
+          To: [
+            {
+              Email: email,
+              Name: `${firstname} ${lastname}`,
+            },
+          ],
+          Subject: subject,
+          TextPart: subject,
+          HTMLPart: await this.getTemplate(content, prehead, link, disclaimer, subject, buttonText),
+        },
+      ],
+    });
+    request
+      .then(result => {
+        console.log(result.body);
+      })
+      .catch(err => {
+        console.log(err.statusCode);
+      });
+  };
 
   public getTemplate = async (
     content: string,
@@ -581,8 +569,5 @@ export class MailService{
         </body>
     
     `;
-        
   };
-
-
 }

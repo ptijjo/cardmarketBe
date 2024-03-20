@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODO
+}
+
+enum Status {
+  Disponible
+  Indisponible
+}
+
+enum TitreCategory {
+  POKEMON
+  ONE_PIECE
+  LORCANA
+}
+
+enum StatusPayement {
+  Idle
+  Payed
+  Refused
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  email           String     @unique
+  first_name      String
+  last_name       String
+  password        String
+  role            Role       @default(USER)
+  token_password  String?
+  adress          Address[]
+  commande        Commande[]
+  created_at      String
+  last_connection String     @default("__")
+  payement        Payement[]
+}
+
+model Address {
+  id         Int    @id @default(autoincrement())
+  number     Int
+  street     String
+  postalCode Int
+  city       String
+  user       User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id    Int
+}
+
+model Card {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  status      Status    @default(Disponible)
+  price       Int
+  picture     String
+  commande    Commande? @relation(fields: [commande_id], references: [id])
+  commande_id Int?
+  category    Category  @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category_id Int
+  stock       Int
+}
+
+model Commande {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [user_id], references: [id])
+  user_id     Int
+  card        Card[]
+  booster     Booster[]
+  starter     Starter[]
+  Createad_at String
+  payement    Payement?
+}
+
+model Category {
+  id      Int           @id @default(autoincrement())
+  title   TitreCategory @unique
+  picture String
+  card    Card[]
+  starter Starter[]
+  booster Booster[]
+}
+
+model Booster {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  status      Status    @default(Disponible)
+  price       Int
+  picture     String
+  commande    Commande? @relation(fields: [commande_id], references: [id])
+  commande_id Int?
+  category    Category  @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category_id Int
+  stock       Int
+}
+
+model Starter {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  status      Status    @default(Disponible)
+  price       Int
+  picture     String
+  commande    Commande? @relation(fields: [commande_id], references: [id])
+  commande_id Int?
+  category    Category  @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category_id Int
+  stock       Int
+}
+
+model Payement {
+  id          Int            @id @default(autoincrement())
+  status      StatusPayement @default(Idle)
+  user_id     Int
+  user        User           @relation(fields: [user_id], references: [id])
+  commande    Commande       @relation(fields: [commande_id], references: [id])
+  commande_id Int            @unique
+}
